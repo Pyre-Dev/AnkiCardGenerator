@@ -1,6 +1,6 @@
 # Anki Card Generator — Wrong Answer Screenshot Tool
 
-Converts any IT exam wrong-answer screenshots into fully formatted Anki cards using Claude Vision. One command, one card, no manual work.
+Converts any exam wrong-answer screenshots into fully formatted Anki cards using Claude Vision. One command, one card, no manual work.
 
 ## What it does
 
