@@ -70,6 +70,7 @@ pip install -r requirements.txt
 ## Usage
 
 ### Basic — add card to default "IT Certs" deck
+### Both single screenshots and entire folders are supported. When running a folder, successfully processed images are automatically moved to a processed/ subfolder so reruns never waste API calls on duplicates.
 
 ```bash
 python main.py path/to/screenshot.png
