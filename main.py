@@ -7,6 +7,7 @@ Pass a single image file or a folder of images.
 
 import sys
 import time
+import shutil
 import argparse
 import json
 from pathlib import Path
@@ -16,6 +17,19 @@ from card_builder import build_card_html
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 DELAY_BETWEEN_CALLS = 2  # seconds between API calls in batch mode
+
+
+def move_to_processed(filepath: Path) -> None:
+    """Move a processed image into a 'processed' subfolder next to the original."""
+    processed_dir = filepath.parent / "processed"
+    processed_dir.mkdir(exist_ok=True)
+    dest = processed_dir / filepath.name
+    # If a file with the same name already exists in processed, don't overwrite
+    if dest.exists():
+        stem = filepath.stem
+        suffix = filepath.suffix
+        dest = processed_dir / f"{stem}_1{suffix}"
+    shutil.move(str(filepath), str(dest))
 
 
 def process_single(screenshot_path: Path, deck: str, tags: list, dry_run: bool) -> bool:
@@ -52,6 +66,8 @@ def process_single(screenshot_path: Path, deck: str, tags: list, dry_run: bool) 
             tags=tags,
         )
         print(f"  [OK] Card created (Note ID: {note_id})")
+        move_to_processed(screenshot_path)
+        print(f"  [MOVED] -> processed/{screenshot_path.name}")
         return True
     except RuntimeError as e:
         # AnkiConnect raises RuntimeError for duplicates and other errors
@@ -150,4 +166,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
